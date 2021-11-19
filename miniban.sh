@@ -6,14 +6,16 @@
 # Husk F-Lock
 
 # ------ Oppgave -------
+# Hint: Use the tail command to monitor activity in the logfile /var/log/auth.log
 # Lese loggen til ssh /var/log/auth.log
 
-# ------ Oppgave -------
-# Lese loggen til ssh /var/log/auth.log
-
-# ------ Oppgave -------
+# ------ Oppgave --------
 # Sjekke om ip-adressen har logget inn feil mange ganger
 
+# ------ Oppgave --------
+# Hint: IFS="," read IP TIMESTAMP < miniban.db; echo $IP $TIMESTAMP
+# Lese loggen til ssh /var/log/auth.log
 
-# ------ Oppgave -------
+
+# ------ Oppgave --------
 # Banne ip adressen med ./ban.sh <ip-adresse>
