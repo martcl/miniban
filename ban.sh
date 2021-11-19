@@ -2,7 +2,7 @@ echo "Programmet starter"
 
 IP=$1
 
-echo "$IP" >> banned.txt
+echo "$IP,$(date +%s)" >> miniban.db
 
-cat banned.txt
+cat miniban.db
 
