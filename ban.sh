@@ -16,7 +16,7 @@ IP=$1
 
 # ----- oppgave -----
 # Lager regel med iptabels som banner ip adresser
-iptabels -A INPUT -s "$IP" -p tcp --destination-port 22 -j DROP
+iptabels -A INPUT -s "$IP" -p tcp -d <ip-adressen-til-vmen>:22 -j DROP
 
 
 # Lagere ip-adressen i databasen sammen med en timestamp
