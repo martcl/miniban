@@ -14,9 +14,9 @@ if [ ! "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]; then
 fi
 # ----- oppgave -----
 # Lager regel med iptabels som banner ip adresser
+
 iptables -A INPUT -s "$IP" -j REJECT
 iptables-save
-
 
 # Lagere ip-adressen i databasen sammen med en timestamp
 echo "$IP,$(date +%s)" >> miniban.db
