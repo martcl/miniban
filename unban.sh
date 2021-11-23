@@ -9,13 +9,18 @@
 
 
 while true; do
-  sleep 2
-  TIME_NOW =$(date +%s)
-  while IFS="," read -r IP TIMESTAMP; do
-    echo "$IP, $TIMESTAMP"
-    if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 600 ]; do
-      echo "Unbanner IP: $IP"
-      sed -i "/$IP,$TIMESTAMP/d" miniban.db
-    fi
-  done < miniban.db
+        sleep 2
+        echo "Sjekker..."
+        TIME_NOW=$(date +%s)
+        while IFS=',' read -r IP TIMESTAMP; do 
+                        echo $IP $TIMESTAMP
+                        if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 30 ]; then
+                                echo "du skal få lov til å klomme inn :)"
+                                iptables -D INPUT -s "$IP" -j REJECT
+                                iptables-save
+                                sed -i  "/$IP,$TIMESTAMP/d" miniban.db
+
+                        fi
+        done < miniban.db
 done
+
