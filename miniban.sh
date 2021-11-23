@@ -26,7 +26,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                         # Hvis brukeren har failet 3 eller flere ganger
                         if [ ${FAIL[$IP]} -ge 2 ]; then
                                 # Her kan vi banne ip-en
-                                # ban.sh $IP
+                                bash ./ban.sh $IP
                                 echo "du er bannet, og kan ikke logge på"
 
                         # Hvis brukeren failer +1
@@ -46,4 +46,5 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                 # Forbedring.. Fjerene fra FAIL
                 echo "Sucess! :-)"
         fi
+
 done
