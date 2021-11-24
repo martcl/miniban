@@ -8,6 +8,7 @@ declare -A FAIL
 
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
 
+
 #bash ./unban.sh $IP
 
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
@@ -32,6 +33,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                                 bash ./ban.sh $IP
                                 echo "du er bannet, og kan ikke logge på"
 
+
                         # Hvis brukeren failer +1
                         else
                                 FAIL[$IP]=$(( ${FAIL[$IP]} + 1 ))
@@ -45,10 +47,12 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
 
 
         # Hvis brukeren suksessfult klarer å logge inn
+
         elif [[ "$LINE" == *"Accepted"* ]]; then
                 # Forbedring.. Fjerene fra FAIL
                 echo "Success! :-)"
-                ${FAIL}
+                
+
         fi
 
 done

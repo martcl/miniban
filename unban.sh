@@ -8,6 +8,7 @@
 # 2. Legge til f-Lock
 
 
+
 TIME_NOW=$(date +%s)
 while IFS=',' read -r IP TIMESTAMP; do 
         echo $IP $TIMESTAMP
@@ -19,3 +20,4 @@ while IFS=',' read -r IP TIMESTAMP; do
         fi
         
 done < miniban.db
+
