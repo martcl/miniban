@@ -7,17 +7,31 @@
 # 1. Legge til at iptabels også unbanner
 # 2. Legge til f-Lock
 
+IP_I=$1
 
+while true; do
+        if [[ -z "$IP_I" ]]; then
+                while true; do
+                TIME_NOW=$(date +%s)
+                sleep 1
+                while IFS=',' read -r IP TIMESTAMP; do
+                        if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 10 ]; then
+                                echo "---> unban $IP"
+                                sudo iptables -D INPUT -s "$IP" -j REJECT
+                                sudo iptables-save
+                                sed -i  "/$IP,$TIMESTAMP/d" miniban.db
 
-TIME_NOW=$(date +%s)
-while IFS=',' read -r IP TIMESTAMP; do 
-        echo $IP $TIMESTAMP
-        if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 30 ]; then
-                echo "du skal få lov til å klomme inn :)"
-                iptables -D INPUT -s "$IP" -j REJECT
-                iptables-save
-                sed -i  "/$IP,$TIMESTAMP/d" miniban.db
+                        fi
+                done < miniban.db
+                done
+        elif [[ "$IP_I" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "--> unban $IP_I"
+                sudo iptables -D INPUT -s "$IP_I" -j REJECT > /dev/null
+                sudo iptables-save > /dev/null
+                break
+        else
+                echo "slutt"
+                break
         fi
-        
-done < miniban.db
+done
 
