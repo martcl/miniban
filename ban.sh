@@ -16,8 +16,8 @@ fi
 # ----- oppgave -----
 # Lager regel med iptabels som banner ip adresser
 
-iptables -A INPUT -s "$IP" -j REJECT
-iptables-save
+iptables -A INPUT -s "$IP" -j REJECT > /dev/null
+iptables-save > /dev/null
 
 # Lagere ip-adressen i databasen sammen med en timestamp
 echo "$IP,$(date +%s)" >> miniban.db
