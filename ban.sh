@@ -1,8 +1,6 @@
 #!/bin/bash
 # ban.sh Ban an IP address using iptables and add the IP address together with a ban
 # timestamp to a persistent flat database file miniban.db (see format below)
-(
-flock -x 100
 IP=$1
 
 # ----- oppgave -----
@@ -24,4 +22,3 @@ iptables-save
 # Lagere ip-adressen i databasen sammen med en timestamp
 echo "$IP,$(date +%s)" >> miniban.db
 echo "banned: $IP"
-) 100>lockfile.lck
