@@ -21,4 +21,4 @@ iptables-save
 
 # Lagere ip-adressen i databasen sammen med en timestamp
 echo "$IP,$(date +%s)" >> miniban.db
-echo "banned: $IP"
+echo "---> banned $IP"
