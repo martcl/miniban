@@ -42,7 +42,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
 
 
         # Hvis brukeren suksessfult klarer å logge inn
-        elif [[ "$LINE" == *"Success"* ]]; then
+        elif [[ "$LINE" == *"Accepted"* ]]; then
                 # Forbedring.. Fjerene fra FAIL
                 echo "Success! :-)"
                 ${FAIL}
