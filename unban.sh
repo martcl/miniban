@@ -7,7 +7,7 @@
 # 1. Legge til at iptabels også unbanner
 # 2. Legge til f-Lock
 
-
+(flock -x 100)
 while true; do
         sleep 2
         echo "Sjekker..."
@@ -23,4 +23,4 @@ while true; do
                         fi
         done < miniban.db
 done
-
+) 100>lockfile.lck
