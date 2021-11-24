@@ -8,6 +8,8 @@ declare -A FAIL
 
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
 
+#bash ./unban.sh $IP
+
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
 tail -f -n0 /var/log/auth.log | while read LINE; do
         # Hvis linjen inneholder substringen "Failed"

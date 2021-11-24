@@ -7,7 +7,8 @@
 # 1. Legge til at iptabels også unbanner
 # 2. Legge til f-Lock
 
-(flock -x 100
+(
+flock -x 100
 while true; do
         sleep 2
         echo "Sjekker..."
