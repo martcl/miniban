@@ -14,6 +14,7 @@ declare -A FAIL
 tail -f -n0 /var/log/auth.log | while read LINE; do
         # Hvis linjen inneholder substringen "Failed"
         ## Kanksje bruke grep?
+        sudo ./unban.sh
         if [[ "$LINE" == *"Failed"* ]]; then
                 echo "$LINE"
 
