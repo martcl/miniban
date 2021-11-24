@@ -28,7 +28,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                 # FOrbedring?? enda bedre regex
                 IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
-                echo "får request fra $IP"
+                echo "request from $IP"
 
                 # Hvis det er første gang brukeren har failet
                 if [ ${FAIL[$IP]+_} ]; then # Hvis det finnes en Ip adresse i Arrayet
@@ -43,12 +43,12 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                                 FAIL[$IP]=$(( ${FAIL[$IP]} + 1 ))
                         fi
                 else
-                        echo "første"
                         FAIL[$IP]=1
                 fi
         # Hvis brukeren suksessfult klarer å logge inn
-        elif [[ "$LINE" == *"Sucess"* ]]; then
+        elif [[ "$LINE" == *"Accepted"* ]]; then
                 # Forbedring.. Fjerene fra FAIL
                 unset "FAIL[$IP]"
         fi
 done
+
