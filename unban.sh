@@ -17,8 +17,8 @@ while true; do
                 while IFS=',' read -r IP TIMESTAMP; do
                         if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 10 ]; then
                                 echo "---> unban $IP"
-                                sudo iptables -D INPUT -s "$IP" -j REJECT
-                                sudo iptables-save
+                                sudo iptables -D INPUT -s "$IP" -j REJECT > /dev/null
+                                sudo iptables-save > /dev/null
                                 sed -i  "/$IP,$TIMESTAMP/d" miniban.db
 
                         fi
