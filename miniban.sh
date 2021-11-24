@@ -6,24 +6,29 @@
 # Dette er en liste som inneholder ipadresser og hvor mange ganger de failet på å logge inn
 declare -A FAIL
 
-# Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
+trap func exit
 
+sudo ./unban.sh &
 
-#bash ./unban.sh $IP
+function func() {
+        echo ""
+
+        ps aux | grep "unban.sh" | awk '{print $2}' | while read NUM; do
+                kill -9 $NUM 
+
+        done
+        echo "miniban is now turned OFF"
+}
 
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
 tail -f -n0 /var/log/auth.log | while read LINE; do
         # Hvis linjen inneholder substringen "Failed"
-        ## Kanksje bruke grep?
-        sudo ./unban.sh
         if [[ "$LINE" == *"Failed"* ]]; then
-                echo "$LINE"
-
                 # Henter ut IP fra linjen med regular-exspression
                 # FOrbedring?? enda bedre regex
-                IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')
+                IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
-                echo $IP
+                echo "får request fra $IP"
 
                 # Hvis det er første gang brukeren har failet
                 if [ ${FAIL[$IP]+_} ]; then # Hvis det finnes en Ip adresse i Arrayet
@@ -31,28 +36,19 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                         if [ ${FAIL[$IP]} -ge 2 ]; then
                                 # Her kan vi banne ip-en
                                 bash ./ban.sh $IP
-                                echo "du er bannet, og kan ikke logge på"
-
+                                unset "FAIL[$IP]"
 
                         # Hvis brukeren failer +1
                         else
                                 FAIL[$IP]=$(( ${FAIL[$IP]} + 1 ))
-                                echo "Pluss 1, du har brukt ${FAIL[$IP]} forsøk"
                         fi
-                else  # Hvis det ikke finnes i Arrayet. legg det til
-                        echo "Dette er en ny IP-adresse"
+                else
+                        echo "første"
                         FAIL[$IP]=1
-
                 fi
-
-
         # Hvis brukeren suksessfult klarer å logge inn
-
-        elif [[ "$LINE" == *"Accepted"* ]]; then
+        elif [[ "$LINE" == *"Sucess"* ]]; then
                 # Forbedring.. Fjerene fra FAIL
-                echo "Success! :-)"
-                
-
+                unset "FAIL[$IP]"
         fi
-
 done
