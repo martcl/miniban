@@ -1,5 +1,5 @@
 #!/bin/bash
-# miniban.sh 
+
 # Main script - watch for system authorisation events relating to SSH (secure
 # shell), keep track of the number of failures per IP address, and when this is greater than or
 # equal to 3, ban the IP address.
@@ -13,12 +13,13 @@ trap func exit
 
 sudo ./unban.sh &
 
+# funksjon som kjører når brukeren avslutter miniban.sh scriptet
 function func() {
         echo ""
-
+        
+        # Henter ut prossessid til alle prossesser som inneholder unban.sh og avslutter dem
         ps aux | grep "unban.sh" | awk '{print $2}' > /dev/null | while read NUM; do
                 kill -9 $NUM 
-
         done
         echo " miniban is now turned OFF"
 }
@@ -27,13 +28,15 @@ function func() {
 tail -f -n0 /var/log/auth.log | while read LINE; do
         # Hvis linjen inneholder substringen "Failed"
         if [[ "$LINE" == *"Failed"* ]]; then
+        
                 # Henter ut IP fra linjen med regular-exspression
                 IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
                 echo "request from $IP"
 
-                # Hvis det er første gang brukeren har failet
-                if [ ${FAIL[$IP]+_} ]; then # Hvis det finnes en Ip adresse i Arrayet
+                # Sjekker om IP addresseen eksisterer i arrayet allerede
+                if [ ${FAIL[$IP]+_} ]; then 
+                
                         # Hvis brukeren har failet 3 eller flere ganger
                         if [ ${FAIL[$IP]} -ge 2 ] && grep -vq "$IP$" miniban.whitelist; then
 
@@ -41,14 +44,15 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                                 bash ./ban.sh $IP
                                 unset "FAIL[$IP]"
 
-                        # Hvis brukeren failer +1
+                        # Hvis brukeren failer flere ganger
                         else
                                 FAIL[$IP]=$(( ${FAIL[$IP]} + 1 ))
                         fi
+                # Brukerens første faild attempt
                 else
                         FAIL[$IP]=1
                 fi
-        # Hvis brukeren suksessfult klarer å logge inn
+        # Hvis brukeren suksessfult klarer å logge inn, sletter vi dem i arrayet
         elif [[ "$LINE" == *"Accepted"* ]]; then
                 unset "FAIL[$IP]"
         fi
