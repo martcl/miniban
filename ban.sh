@@ -8,7 +8,7 @@ IP=$1
 # (Ganske sikker på at deb fungerer, men det er ikke noe poeng
 # Å bruke den når vi driver å tester uansett så la den være kommentert)
 
-if [ ! "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]; then
+if [[ ! "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 
     echo "IP adress: $IP is not valid"
     exit 1
