@@ -33,7 +33,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                 # Hvis det er første gang brukeren har failet
                 if [ ${FAIL[$IP]+_} ]; then # Hvis det finnes en Ip adresse i Arrayet
                         # Hvis brukeren har failet 3 eller flere ganger
-                        if [ ${FAIL[$IP]} -ge 2 ]; then
+                        if [ ${FAIL[$IP]} -ge 2 ] && grep -v "$IP$" miniban.whitelist; then
                                 # Her kan vi banne ip-en
                                 bash ./ban.sh $IP
                                 unset "FAIL[$IP]"
