@@ -1,9 +1,10 @@
 #!/bin/bash
-# miniban.sh Main script - watch for system authorisation events relating to SSH (secure
+# miniban.sh 
+# Main script - watch for system authorisation events relating to SSH (secure
 # shell), keep track of the number of failures per IP address, and when this is greater than or
-# equal to 3, ban the IP address (see next point)
+# equal to 3, ban the IP address.
 
-# Dette er en liste som inneholder ipadresser og hvor mange ganger de failet på å logge inn
+# Dette er en liste som inneholder ipadresser og hvor mange ganger de failet på å logge inn:
 declare -A FAIL
 
 trap func exit
@@ -25,7 +26,6 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
         # Hvis linjen inneholder substringen "Failed"
         if [[ "$LINE" == *"Failed"* ]]; then
                 # Henter ut IP fra linjen med regular-exspression
-                # FOrbedring?? enda bedre regex
                 IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
                 echo "request from $IP"
@@ -47,8 +47,6 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
                 fi
         # Hvis brukeren suksessfult klarer å logge inn
         elif [[ "$LINE" == *"Accepted"* ]]; then
-                # Forbedring.. Fjerene fra FAIL
                 unset "FAIL[$IP]"
         fi
 done
-
