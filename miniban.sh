@@ -14,11 +14,11 @@ sudo ./unban.sh &
 function func() {
         echo ""
 
-        ps aux | grep "unban.sh" | awk '{print $2}' | while read NUM; do
+        ps aux | grep "unban.sh" | awk '{print $2}' > /dev/null | while read NUM; do
                 kill -9 $NUM 
 
         done
-        echo "miniban is now turned OFF"
+        echo " miniban is now turned OFF"
 }
 
 # Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
