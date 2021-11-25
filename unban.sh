@@ -26,6 +26,7 @@ while true; do
                 echo "--> unban $IP_I"
                 sudo iptables -D INPUT -s "$IP_I" -j REJECT > /dev/null
                 sudo iptables-save > /dev/null
+                sed -i  "/$IP,$TIMESTAMP/d" miniban.db
                 break
         else
                 echo "slutt"
