@@ -4,6 +4,8 @@
 # shell), keep track of the number of failures per IP address, and when this is greater than or
 # equal to 3, ban the IP address.
 
+echo "miniban is now turned ON"
+
 # Dette er en liste som inneholder ipadresser og hvor mange ganger de failet på å logge inn:
 declare -A FAIL
 
