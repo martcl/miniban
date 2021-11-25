@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# unban.sh Periodically check banned IPs in miniban.db and remove them if the ban has
+# unban.sh 
+# Periodically check banned IPs in miniban.db and remove them if the ban has
 # expired (10 minutes). Remove the iptables rule for the IP address
-
-# ------ Å gjøre ------
-# 1. Legge til at iptabels også unbanner
-# 2. Legge til f-Lock
 
 IP_I=$1
 
@@ -24,6 +21,7 @@ while true; do
                         fi
                 done < miniban.db
                 done
+        
         elif [[ "$IP_I" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
                 echo "--> unban $IP_I"
                 sudo iptables -D INPUT -s "$IP_I" -j REJECT > /dev/null
