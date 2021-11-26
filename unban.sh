@@ -18,7 +18,7 @@ if [[ -z "$IP_I" ]]; then
                         if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 600 ]; then
                                 echo "---> unban $IP"
                                 # Removes rule for IP in iptables and then save
-                                sudo iptables -D INPUT -s "$IP" -j REJECT > /dev/null
+                                sudo iptables -D INPUT -s "$IP" -j REJECT > /dev/null 2>&1
                                 sudo iptables-save > /dev/null
                                 # Removes IP and timestamp from miniban.db
                                 sed -i  "/$IP,$TIMESTAMP/d" miniban.db
