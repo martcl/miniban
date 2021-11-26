@@ -15,10 +15,12 @@ if [[ -z "$IP_I" ]]; then
                 
                 # Reads from miniban.db to check if an IP has excited the bantime
                 while IFS=',' read -r IP TIMESTAMP; do
-                        if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 10 ]; then
+                        if [ $(( $TIME_NOW - $TIMESTAMP )) -ge 600 ]; then
                                 echo "---> unban $IP"
+                                # Removes rule for IP in iptables and then save
                                 sudo iptables -D INPUT -s "$IP" -j REJECT > /dev/null
                                 sudo iptables-save > /dev/null
+                                # Removes IP and timestamp from miniban.db
                                 sed -i  "/$IP,$TIMESTAMP/d" miniban.db
                         fi
                 done < miniban.db
@@ -27,12 +29,12 @@ if [[ -z "$IP_I" ]]; then
 # Check if the given argument is a valid IPv4 adress
 elif [[ "$IP_I" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         echo "--> unban $IP_I"
+        # Removes rule for IP in iptables and save
         sudo iptables -D INPUT -s "$IP_I" -j REJECT > /dev/null
         sudo iptables-save > /dev/null
+        # Removes IP and timestamp from miniban.db
         sed -i  "/$IP,$TIMESTAMP/d" miniban.db
         
 else
         echo "Not a valid IP address"
 fi
-
-
