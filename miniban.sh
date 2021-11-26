@@ -6,53 +6,54 @@
 
 echo "miniban is now turned ON"
 
-# Dette er en liste som inneholder ipadresser og hvor mange ganger de failet på å logge inn:
+# This is an array that contains IP addresses and how many failed attempts to login
 declare -A FAIL
 
 trap func exit
 
 sudo ./unban.sh &
 
-# funksjon som kjører når brukeren avslutter miniban.sh scriptet
+# A function that runs when the user exits the miniban.sh script
 function func() {
         echo ""
         
-        # Henter ut prossessid til alle prossesser som inneholder unban.sh og avslutter dem
+        # Retrieves the process page for all processes that contain unban.sh and terminates them
         ps aux | grep "unban.sh" | awk '{print $2}' > /dev/null | while read NUM; do
                 kill -9 $NUM 
         done
         echo " miniban is now turned OFF"
 }
 
-# Loopen leser alle nye linjer i ssh loggen og setter dem inn i LINE variabelen
+# The loop reads all new lines in the ssh log and puts them in the LINE variable
 tail -f -n0 /var/log/auth.log | while read LINE; do
-        # Hvis linjen inneholder substringen "Failed"
+        # If the line contains the substring "Failed"
         if [[ "$LINE" == *"Failed"* ]]; then
         
-                # Henter ut IP fra linjen med regular-exspression
+                # Retrieves the IP from the line with regular-expression
+
                 IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
                 echo "request from $IP"
 
-                # Sjekker om IP addresseen eksisterer i arrayet allerede
+                # Checks if the IP address exists in the array "FAIL"
                 if [ ${FAIL[$IP]+_} ]; then 
                 
-                        # Hvis brukeren har failet 3 eller flere ganger
+                        # If the user fails 3 or more times and is not in the miniban.whitelist
                         if [ ${FAIL[$IP]} -ge 2 ] && grep -vq "$IP$" miniban.whitelist; then
 
-                                # Her kan vi banne ip-en
+                                # Here the ban.sh script is executed
                                 bash ./ban.sh $IP
                                 unset "FAIL[$IP]"
 
-                        # Hvis brukeren failer flere ganger
+                        # If the user fails multiple times
                         else
                                 FAIL[$IP]=$(( ${FAIL[$IP]} + 1 ))
                         fi
-                # Brukerens første faild attempt
+                # The first failed attempt from the user
                 else
                         FAIL[$IP]=1
                 fi
-        # Hvis brukeren suksessfult klarer å logge inn, sletter vi dem i arrayet
+        # If the user gets a successfull login, then they get deleted from the array "FAIL"
         elif [[ "$LINE" == *"Accepted"* ]]; then
                 unset "FAIL[$IP]"
         fi
