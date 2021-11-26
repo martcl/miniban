@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Ban an IP address using iptables and adds the IP address together with a ban-
+# Ban an IP address using iptables and adds the IP address together with a ban
+
 # timestamp to a persistent flat database file miniban.db.
 
 IP=$1

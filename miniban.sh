@@ -30,6 +30,7 @@ tail -f -n0 /var/log/auth.log | while read LINE; do
         if [[ "$LINE" == *"Failed"* ]]; then
         
                 # Retrieves the IP from the line with regular-expression
+
                 IP=$(echo $LINE | grep -oP '(\d{1,3}\.){3}\d{1,3}')               
 
                 echo "request from $IP"
